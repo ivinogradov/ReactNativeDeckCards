@@ -49,9 +49,7 @@ const Deck = () => {
                 renderItem={({item, index})=>(
                     <Text>{item.code}</Text>
                 )}
-                keyExtractor={(item, index)=> {
-                    item.code.toString();
-                }}
+                keyExtractor={(item, index)=> item.code.toString() }
             />
         </View>
     );
