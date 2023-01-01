@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import  { View, Text, FlatList } from 'react-native';
+import  { View, Text, FlatList, StyleSheet } from 'react-native';
 import Card from './Card';
 import { NEW_DECK_URL, getDrawCardsURL } from '../urls';
 
@@ -41,13 +41,20 @@ const Deck = () => {
     }, [deckId]);
 
     return(
-        <View>
-            <Text>You've got a deck:{deckId}</Text>
-            <Card />
+        <View style={styles.container}>
+            <Text>You've got a deck with ID: {deckId}</Text>
             <FlatList
+                style={{ width: '100%' }}
+                horizontal={true}
                 data={cards}
                 renderItem={({item, index})=>(
-                    <Text>{item.code}</Text>
+                    <View style={styles.rowStyle}>
+                        <Card
+                            image={item.image}
+                            suit={item.suit}
+                            value={item.value}
+                        />
+                    </View>
                 )}
                 keyExtractor={(item, index)=> item.code.toString() }
             />
@@ -56,3 +63,18 @@ const Deck = () => {
 }
 
 export default Deck;
+
+const styles = StyleSheet.create({
+    rowStyle: {
+        paddingVertical: 15,
+        paddingHorizontal: 15,
+        flexDirection: 'row'
+    },container: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 30
+    }
+});

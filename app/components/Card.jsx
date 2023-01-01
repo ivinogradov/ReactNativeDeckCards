@@ -1,12 +1,28 @@
 import React from 'react';
-import  {View, Text} from 'react-native';
+import  { View, Image, Text, StyleSheet } from 'react-native';
 
-const Card = () => {
+const Card = (props) => {
+    const { image, suit, value } = props;
     return(
-        <View>
-            <Text>This is a Card component</Text>
+        <View style={styles.container}>
+            <Image
+                source={{ uri: image }}
+                style={styles.image}
+            />
+            <Text style={{ padding: 10 }}>{value} {suit}</Text>
         </View>
     );
 }
 
 export default Card;
+
+const styles = StyleSheet.create({
+    container : {
+       justifyContent: 'center',
+       alignItems: 'center',
+    },
+    image: {
+        height: 300,
+        width: 216
+    }
+});
