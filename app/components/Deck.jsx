@@ -8,37 +8,42 @@ const NUMBER_OF_CARDS_TO_DRAW = 5;
 const Deck = () => {
     const [deckId, setDeckId] = useState();
     const [cards, setCards] = useState([]);
+    const [isRefreshing, setRefreshing] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     // call once on component mount
     useEffect(() => {
         /**
          * Creates new deck of cards
-         * @param {function} callback called with the ID of the deck passed as a parameter
          */
-        const loadNewDeck = async (callback) => {
+        const loadNewDeck = async() => {
             const response = await fetch(NEW_DECK_URL);
             const jsonObject = await response.json();
             if (jsonObject && jsonObject.success) {
-                callback(jsonObject.deck_id);
+                setDeckId(jsonObject.deck_id);
             }
         }
-        loadNewDeck(setDeckId);
+        loadNewDeck();
     }, []);
 
     // call every time for each deckId update
     useEffect(() => {
-        const drawCards = async(callback) => {
+        /**
+         * Draws 5 cards from the deck
+         */
+        const drawCards = async() => {
             if (!deckId) {
                 return;
             }
             const response = await fetch(getDrawCardsURL(deckId, NUMBER_OF_CARDS_TO_DRAW));
             const jsonObject = await response.json();
             if (jsonObject && jsonObject.cards) {
-                callback(jsonObject.cards);
+                setCards(jsonObject.cards);
+                setRefreshing(false);
             }
         }
-        drawCards(setCards);
-    }, [deckId]);
+        drawCards();
+    }, [deckId, refreshKey]);
 
     return(
         <View style={styles.container}>
@@ -57,12 +62,26 @@ const Deck = () => {
                     </View>
                 )}
                 keyExtractor={(item, index)=> item.code.toString() }
+                refreshing={isRefreshing}
+                onRefresh={ () => {
+                    setRefreshing(true);
+                    setRefreshKey(refreshKey + 1);
+                }}
             />
         </View>
     );
 }
 
 export default Deck;
+
+/**
+ * Returns previously drawn cards to the deck
+ *  and draws 5 new cards
+ */
+const redrawCards = () => {
+
+    console.log('redrawing');
+}
 
 const styles = StyleSheet.create({
     rowStyle: {
