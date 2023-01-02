@@ -26,7 +26,6 @@ const Deck = () => {
             }
         }
         loadNewDeck();
-        shuffleDeck(deckId);
     }, []);
 
     // call every time for each deckId or refreshKey update
@@ -88,6 +87,8 @@ export default Deck;
 /**
  * Returns previously drawn cards to the deck
  *  and shuffles them
+ * @param {String} deckId unique identifier of the deck
+ * @return {boolean} true if successful, false otherwise
  */
 const returnCards = async(deckId) => {
     const response = await fetch(shuffleDeck(deckId));
