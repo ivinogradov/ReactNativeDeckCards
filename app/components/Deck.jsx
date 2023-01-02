@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import  { View, Text, FlatList, StyleSheet } from 'react-native';
 import Card from './Card';
-import { NEW_DECK_URL, getDrawCardsURL } from '../urls';
+import { NEW_DECK_URL, getDrawCardsURL, returnCardsURL } from '../urls';
 
 const NUMBER_OF_CARDS_TO_DRAW = 5;
 
@@ -63,9 +63,9 @@ const Deck = () => {
                 )}
                 keyExtractor={(item, index)=> item.code.toString() }
                 refreshing={isRefreshing}
-                onRefresh={ () => {
+                onRefresh={() => {
                     setRefreshing(true);
-                    setRefreshKey(refreshKey + 1);
+                    returnCards(deckId).then(setRefreshKey(refreshKey + 1));
                 }}
             />
         </View>
@@ -76,11 +76,9 @@ export default Deck;
 
 /**
  * Returns previously drawn cards to the deck
- *  and draws 5 new cards
  */
-const redrawCards = () => {
-
-    console.log('redrawing');
+const returnCards = async(deckId) => {
+    await fetch(returnCardsURL(deckId));
 }
 
 const styles = StyleSheet.create({
